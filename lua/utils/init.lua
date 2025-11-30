@@ -8,8 +8,12 @@ function M.is_remote()
   end
 end
 
-function M.has_pack_plugin(name)
-  local plugins = vim.pack.get({plugin_name})  
+-- 判断某个插件是否启动
+function M.has(name)
+  local ok, plugins = pcall(vim.pack.get, {plugin_name})  
+  if not ok then  
+    return false  -- 插件未安装或其他错误  
+  end  
   return #plugins > 0 and plugins[1].active == true  
 end
 
