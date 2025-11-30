@@ -52,7 +52,7 @@ require("snacks").setup({
         },
     },
     explorer = {
-      replace_netrw = true, -- Replace netrw with the snacks explorer
+        replace_netrw = true, -- Replace netrw with the snacks explorer
     },
     image = {
         enabled = false,
@@ -168,3 +168,4 @@ map("<leader>gb", Snacks.git.blame_line, "Git blame line")
 
 map("<leader>K", Snacks.image.hover, "Display image in hover")
 map("<leader>.", function() Snacks.scratch() end, "Toggle Scratch Buffer")
+map("<leader>ll", function() Snacks.picker.lsp_config() end, "Lsp Info")
