@@ -1,5 +1,13 @@
 {
   "plugins": {
+    "conform.nvim": {
+      "rev": "4993e07",
+      "src": "https://github.com/stevearc/conform.nvim"
+    },
+    "mason.nvim": {
+      "rev": "57e5a8a",
+      "src": "https://github.com/mason-org/mason.nvim"
+    },
     "mini.pairs": {
       "rev": "472ec50092a3314ec285d2db2baa48602d71fe93",
       "src": "https://github.com/nvim-mini/mini.pairs"
@@ -7,6 +15,10 @@
     "nvim": {
       "rev": "ce4a8e0d5267e67056f9f4dcf6cb1d0933c8ca00",
       "src": "https://github.com/catppuccin/nvim"
+    },
+    "nvim-lspconfig": {
+      "rev": "effe4bf",
+      "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-osc52": {
       "rev": "04cfaba1865ae5c53b6f887c3ca7304973824fb2",
