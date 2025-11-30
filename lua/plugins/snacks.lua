@@ -167,3 +167,4 @@ map("<leader>N", Snacks.notifier.hide, "Notification history")
 map("<leader>gb", Snacks.git.blame_line, "Git blame line")
 
 map("<leader>K", Snacks.image.hover, "Display image in hover")
+map("<leader>.", function() Snacks.scratch() end, "Toggle Scratch Buffer")

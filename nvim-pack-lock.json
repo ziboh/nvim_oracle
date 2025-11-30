@@ -12,6 +12,10 @@
       "rev": "04cfaba1865ae5c53b6f887c3ca7304973824fb2",
       "src": "https://github.com/ojroques/nvim-osc52"
     },
+    "rooter.nvim": {
+      "rev": "a919227",
+      "src": "https://github.com/wsdjeg/rooter.nvim"
+    },
     "snacks.nvim": {
       "rev": "fe7cfe9800a182274d0f868a74b7263b8c0c020b",
       "src": "https://github.com/folke/snacks.nvim"

@@ -9,8 +9,8 @@ function M.is_remote()
 end
 
 function M.has_pack_plugin(name)
-  local list = vim.pack.get({name}, {info = false}) -- 只查一个，轻量
-  return list and list[1] and vim.fn.isdirectory(list[1].path) == 1
+  local plugins = vim.pack.get({plugin_name})  
+  return #plugins > 0 and plugins[1].active == true  
 end
 
 return M
