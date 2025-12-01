@@ -60,4 +60,29 @@ function M.is_free_memory_less_than_1gb(gb)
 	return free_memory < threshold
 end
 
+-- 转换 lazy.nvim keys 为通用 keyma
+function M.setup_keymaps(keys, opts)
+	opts = opts or { silent = true, noremap = true }
+	local default_opts = vim.deepcopy(opts)
+
+	for _, keymap in ipairs(keys) do
+		local lhs = keymap[1]
+		local rhs = keymap[2]
+		local keymap_opts = vim.tbl_deep_extend("force", default_opts, {})
+
+		-- 复制键映射特定选项
+		for k, v in pairs(keymap) do
+			if type(k) ~= "number" then
+				keymap_opts[k] = v
+			end
+		end
+
+		-- 提取 mode 并从选项中移除
+		local mode = keymap_opts.mode or "n"
+		keymap_opts.mode = nil
+
+		vim.keymap.set(mode, lhs, rhs, keymap_opts)
+	end
+end
+
 return M
