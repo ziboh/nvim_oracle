@@ -18,6 +18,22 @@ function M.is_remote()
 	end
 end
 
+function M.is_win()
+	return vim.uv.os_uname().sysname:find("Windows") ~= nil
+end
+
+function M.is_linux()
+	return vim.uv.os_uname().sysname:find("Linux") ~= nil
+end
+
+function M.is_wsl()
+	if os.getenv("WSL_DISTRO_NAME") then
+		return true
+	else
+		return false
+	end
+end
+
 -- 判断某个插件是否启动
 function M.has(name)
 	local ok, plugins = pcall(vim.pack.get, { name })
