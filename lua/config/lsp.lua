@@ -1,6 +1,40 @@
 vim.pack.add({
 	{ src = "https://github.com/mason-org/mason.nvim" },
 })
+
+require("mason").setup()
+
+local diagnostics = {
+	virtual_text = {
+		spacing = 4,
+		source = "if_many",
+		-- prefix = "●",
+		-- this will set set the prefix to a function that returns the diagnostics icon based on the severity
+		prefix = "icons",
+	},
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = Utils.icons.diagnostics.Error,
+			[vim.diagnostic.severity.HINT] = Utils.icons.diagnostics.Hint,
+			[vim.diagnostic.severity.WARN] = Utils.icons.diagnostics.Warn,
+			[vim.diagnostic.severity.INFO] = Utils.icons.diagnostics.Info,
+		},
+	},
+}
+
+diagnostics.virtual_text.prefix = function(diagnostic)
+	local icons = Utils.icons.diagnostics
+	for d, icon in pairs(icons) do
+		if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
+			return icon
+		end
+	end
+	return "●"
+end
+
+vim.diagnostic.config(diagnostics)
+vim.keymap.set("n", "<leader>pm", "<cmd>Mason<cr>", { remap = true, desc = "Mason" })
+
 if not Utils.is_memory_less_than() then
 	vim.pack.add({
 		{ src = "https://github.com/mason-org/mason.nvim" },
@@ -8,7 +42,6 @@ if not Utils.is_memory_less_than() then
 		{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
 	})
 
-	require("mason").setup()
 	require("mason-lspconfig").setup({
 		ensure_installed = { "lua_ls", "stylua" },
 		automatic_enable = {
@@ -171,34 +204,3 @@ if not Utils.is_memory_less_than() then
 		end,
 	})
 end
-local diagnostics = {
-	virtual_text = {
-		spacing = 4,
-		source = "if_many",
-		-- prefix = "●",
-		-- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-		prefix = "icons",
-	},
-	signs = {
-		text = {
-			[vim.diagnostic.severity.ERROR] = Utils.icons.diagnostics.Error,
-			[vim.diagnostic.severity.HINT] = Utils.icons.diagnostics.Hint,
-			[vim.diagnostic.severity.WARN] = Utils.icons.diagnostics.Warn,
-			[vim.diagnostic.severity.INFO] = Utils.icons.diagnostics.Info,
-		},
-	},
-}
-
-diagnostics.virtual_text.prefix = function(diagnostic)
-	local icons = Utils.icons.diagnostics
-	for d, icon in pairs(icons) do
-		if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-			return icon
-		end
-	end
-	return "●"
-end
-
-vim.diagnostic.config(diagnostics)
-
-vim.keymap.set("n", "<leader>pm", "<cmd>Mason<cr>", { remap = true, desc = "Mason" })
