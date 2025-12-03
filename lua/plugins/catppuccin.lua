@@ -20,5 +20,6 @@ require("catppuccin").setup({
     },
 })
 vim.cmd("colorscheme catppuccin")
-vim.cmd.hi("statusline guibg=NONE")
-vim.cmd.hi("Comment gui=none")
+vim.api.nvim_set_hl(0, "statusline", { bg = "NONE" })
+vim.api.nvim_set_hl(0, "Comment", { bg = "NONE" })
+vim.api.nvim_set_hl(0, "YankyYanked", { fg = "#161b22", bg = "#ff8f62" })

@@ -98,6 +98,6 @@ opt.clipboard = "unnamedplus"
 
 opt.title = true
 opt.titlestring = "neovim"
--- opt.shell = "nu"
--- opt.shellcmdflag = "-c" -- Nushell 使用 -c 标志运行命令
--- opt.shellxquote = "" -- 避免额外的引号干扰
+opt.shell = "nu"
+opt.shellcmdflag = "-c" -- Nushell 使用 -c 标志运行命令
+opt.shellxquote = "" -- 避免额外的引号干扰
