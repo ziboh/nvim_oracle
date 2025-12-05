@@ -487,7 +487,7 @@ require("gp").setup({
 					-- 启动动画
 					start_spinner()
 					vim.api.nvim_buf_set_keymap(
-						0,
+						buf,
 						"n",
 						"<cr>",
 						"<cmd>lua " .. [[Snacks.notify.warn("生成Commit中，请稍等",{ title = "Gp Commit"})<cr>]],
@@ -511,7 +511,7 @@ require("gp").setup({
 							local git_commit = [[vim.fn.system("git commit -F ]] .. git_commit_path .. [[")]]
 
 							vim.api.nvim_buf_set_keymap(
-								0,
+								buf,
 								"n",
 								"<cr>",
 								"<cmd>lua "
@@ -531,7 +531,7 @@ require("gp").setup({
 
 local keys = {
 	{ "<leader>ts", "<cmd>GpTranslator<cr>", desc = "Translate", mode = { "n", "v" } },
-	{ "<leader>tc", "<cmd>GpGitCommit<cr>", desc = "Git commits", mode = { "n", "v" } },
+	{ "<leader>gc", "<cmd>GpGitCommit<cr>", desc = "Git commits", mode = { "n", "v" } },
 	{ "<C-g>z", "<cmd>GpSetAgent<cr>", desc = "GPT prompt Choose Agent" },
 	{ "<C-g>Z", "<cmd>GpSetAgent!<cr>", desc = "Get Agent From State" },
 	{ "<C-g>c", "<cmd>GpChatNew vsplit<cr>", mode = { "n", "i" }, desc = "New Chat" },

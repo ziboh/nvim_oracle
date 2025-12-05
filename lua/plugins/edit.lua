@@ -1,3 +1,4 @@
+require("plugins.rooter")
 vim.pack.add({
 	{ src = "https://github.com/monaqa/dial.nvim" },
 	{ src = "https://github.com/mrjones2014/smart-splits.nvim" },
