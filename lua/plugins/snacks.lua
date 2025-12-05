@@ -336,6 +336,7 @@ local keys = {
 		function()
 			Snacks.terminal()
 		end,
+		mode = { "n", "t" },
 		desc = "Toggle Terminal",
 	},
 	{
@@ -343,7 +344,8 @@ local keys = {
 		function()
 			Snacks.terminal()
 		end,
-		desc = "which_key_ignore",
+		mode = { "n", "t" },
+		desc = "Toggle Terminal",
 	},
 	{
 		"]]",
