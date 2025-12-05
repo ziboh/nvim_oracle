@@ -3,7 +3,7 @@ vim.pack.add({
 })
 
 require("mason").setup()
-
+local automatic_enable = { "nushell", "lua_ls" }
 local diagnostics = {
 	virtual_text = {
 		spacing = 4,
@@ -42,6 +42,9 @@ if not Utils.is_memory_less_than() then
 		{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
 	})
 
+	vim.keymap.set("n", "<leader>ll", function()
+		Snacks.picker.lsp_config()
+	end, { desc = "Lsp Info", silent = true, noremap = true })
 	require("mason-lspconfig").setup({
 		ensure_installed = { "lua_ls", "stylua" },
 		automatic_enable = {
@@ -203,4 +206,7 @@ if not Utils.is_memory_less_than() then
 			end
 		end,
 	})
+	for _, lsp in ipairs(automatic_enable) do
+		vim.lsp.enable(lsp)
+	end
 end
