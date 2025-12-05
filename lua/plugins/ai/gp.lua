@@ -433,7 +433,7 @@ require("gp").setup({
 				local on_exit = function() end
 				local messages = {}
 				local commit_prompt_template = prompt.commit_prompt_template
-				local git_diff_msg = vim.fn.system("git diff --no-ext-diff --staged")
+				local git_diff_msg = vim.fn.system("git --no-pager diff --no-ext-diff --staged")
 				if git_diff_msg == "" then
 					Snacks.notify.warn("没有新增或修改的文件", { title = "Gp Commit" })
 					return
