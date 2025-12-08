@@ -106,6 +106,7 @@ local opts = {
 		["<S-Tab>"] = { "snippet_backward", "fallback" },
 		["<CR>"] = { "accept", "fallback" },
 		["<C-y>"] = { "select_and_accept" },
+		["<C-n>"] = { "show", "select_next", "fallback_to_mappings" },
 	},
 	appearance = {
 		use_nvim_cmp_as_default = false,
@@ -162,18 +163,13 @@ end
 opts.sources.compat = nil
 -- check if we need to override symbol kinds
 for _, provider in pairs(opts.sources.providers or {}) do
-	---@cast provider blink.cmp.SourceProviderConfig|{kind?:string}
 	if provider.kind then
 		local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
 		local kind_idx = #CompletionItemKind + 1
 		CompletionItemKind[kind_idx] = provider.kind
-		---@diagnostic disable-next-line: no-unknown
 		CompletionItemKind[provider.kind] = kind_idx
 
-		---@type fun(ctx: blink.cmp.Context, items: blink.cmp.CompletionItem[]): blink.cmp.CompletionItem[]
 		local transform_items = provider.transform_items
-		---@param ctx blink.cmp.Context
-		---@param items blink.cmp.CompletionItem[]
 		provider.transform_items = function(ctx, items)
 			items = transform_items and transform_items(ctx, items) or items
 			for _, item in ipairs(items) do
@@ -187,3 +183,4 @@ for _, provider in pairs(opts.sources.providers or {}) do
 end
 
 require("blink.cmp").setup(opts)
+vim.api.nvim_exec_autocmds("User", { pattern = "BlinkDown" })

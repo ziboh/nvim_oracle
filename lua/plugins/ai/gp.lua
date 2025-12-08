@@ -1,8 +1,11 @@
--- vim.pack.add({
--- 	-- { src = "https://github.com/ziboh/gp.nvim" },
--- 	"D:/zibo/Documents/projects/gp.nvim",
--- })
-vim.opt.rtp:append("D:/zibo/Documents/projects/gp.nvim")
+local project_dir = vim.env.PROJECT_DIRS
+if project_dir ~= nil and vim.fn.isdirectory(vim.fs.joinpath(project_dir, "gp.nvim")) == 1 then
+	vim.opt.rtp:append(vim.fs.joinpath(project_dir, "gp.nvim"))
+else
+	vim.pack.add({
+		"https://github.com/ziboh/gp.nvim.git",
+	})
+end
 
 local trans_win
 local prompt = require("plugins.ai.prompt")
@@ -33,7 +36,7 @@ require("gp").setup({
 			name = "ChatQwen3-480B",
 			chat = true,
 			command = false,
-			model = { model = "Qwen/Qwen3-Coder-480B-A35B-Instruct", temperature = 0.8, top_p = 1 },
+			model = { model = "Qwen/Qwen3-Coder-480B-A35B-Instruct" },
 			system_prompt = require("gp.defaults").chat_system_prompt,
 		},
 		{
@@ -41,7 +44,7 @@ require("gp").setup({
 			name = "CodeQwen3-480B",
 			chat = false,
 			command = true,
-			model = { model = "Qwen/Qwen3-Coder-480B-A35B-Instruct", temperature = 1, top_p = 1 },
+			model = { model = "Qwen/Qwen3-Coder-480B-A35B-Instruct" },
 			system_prompt = require("gp.defaults").chat_system_prompt,
 		},
 		{
@@ -49,7 +52,7 @@ require("gp").setup({
 			name = "ChatDeepseek",
 			chat = true,
 			command = false,
-			model = { model = "deepseek-chat", temperature = 1, top_p = 1 },
+			model = { model = "deepseek-chat" },
 			system_prompt = require("gp.defaults").chat_system_prompt,
 		},
 		{
@@ -57,7 +60,7 @@ require("gp").setup({
 			name = "ChatGLM-4-5-Flash",
 			chat = true,
 			command = false,
-			model = { model = "glm-4.5-flash", temperature = 1, top_p = 1 },
+			model = { model = "glm-4.5-flash" },
 			system_prompt = require("gp.defaults").chat_system_prompt,
 		},
 		{
@@ -65,7 +68,7 @@ require("gp").setup({
 			name = "CodeGLM-4-5-Flash",
 			chat = false,
 			command = true,
-			model = { model = "glm-4.5-flash", temperature = 0.8, top_p = 1 },
+			model = { model = "glm-4.5-flash" },
 			system_prompt = require("gp.defaults").code_system_prompt,
 		},
 		{
@@ -73,7 +76,7 @@ require("gp").setup({
 			name = "ChatDeepseekThink",
 			chat = true,
 			command = false,
-			model = { model = "deepseek-reasoner", temperature = 1, top_p = 1 },
+			model = { model = "deepseek-reasoner" },
 			system_prompt = require("gp.defaults").chat_system_prompt,
 		},
 		{
@@ -81,7 +84,7 @@ require("gp").setup({
 			name = "CodeDeepseek",
 			chat = false,
 			command = true,
-			model = { model = "deepseek-chat", temperature = 0.8, top_p = 1 },
+			model = { model = "deepseek-chat" },
 			system_prompt = require("gp.defaults").code_system_prompt,
 		},
 		{
@@ -89,7 +92,7 @@ require("gp").setup({
 			name = "ChatClaude-Haiku-4-5",
 			chat = true,
 			command = false,
-			model = { model = "claude-haiku-4-5", temperature = 1, top_p = 1 },
+			model = { model = "claude-haiku-4-5" },
 			system_prompt = require("gp.defaults").chat_system_prompt,
 		},
 		{
@@ -97,7 +100,7 @@ require("gp").setup({
 			name = "CodeClaude-3-5-Sonnet",
 			chat = false,
 			command = true,
-			model = { model = "claude-3-5-sonnet-20241022", temperature = 0.8, top_p = 1 },
+			model = { model = "claude-3-5-sonnet-20241022" },
 			system_prompt = require("gp.defaults").code_system_prompt,
 		},
 		{
@@ -105,7 +108,7 @@ require("gp").setup({
 			name = "ChatGemini",
 			chat = true,
 			command = false,
-			model = { model = "gemini-2.5-flash", temperature = 1, top_p = 1 },
+			model = { model = "gemini-2.5-flash" },
 			system_prompt = chat_system_prompt_cn,
 		},
 		{
@@ -113,7 +116,7 @@ require("gp").setup({
 			name = "CodeGemini",
 			chat = false,
 			command = true,
-			model = { model = "gemini-2.5-flash", temperature = 0.8, top_p = 1 },
+			model = { model = "gemini-2.5-flash" },
 			system_prompt = require("gp.defaults").code_system_prompt,
 		},
 		{
@@ -121,7 +124,7 @@ require("gp").setup({
 			name = "ChatGeminiPro",
 			chat = true,
 			command = false,
-			model = { model = "gemini-2.5-pro", temperature = 1, top_p = 1 },
+			model = { model = "gemini-2.5-pro" },
 			system_prompt = chat_system_prompt_cn,
 		},
 		{
@@ -129,7 +132,7 @@ require("gp").setup({
 			name = "CodeGeminiPro",
 			chat = false,
 			command = true,
-			model = { model = "gemini-2.5-pro", temperature = 0.8, top_p = 1 },
+			model = { model = "gemini-2.5-pro" },
 			system_prompt = require("gp.defaults").code_system_prompt,
 		},
 		{
@@ -137,7 +140,7 @@ require("gp").setup({
 			name = "ChatGPT5-Mini",
 			chat = true,
 			command = false,
-			model = { model = "gpt-5-mini", temperature = 1, top_p = 1 },
+			model = { model = "gpt-5-mini" },
 			system_prompt = chat_system_prompt_cn,
 		},
 		{
@@ -145,7 +148,7 @@ require("gp").setup({
 			name = "CodeGPT5-Mini",
 			chat = false,
 			command = true,
-			model = { model = "gpt-5-mini", temperature = 0.8, top_p = 1 },
+			model = { model = "gpt-5-mini" },
 			system_prompt = require("gp.defaults").code_system_prompt,
 		},
 		{
@@ -153,7 +156,7 @@ require("gp").setup({
 			name = "CodeGPT5-Nano",
 			chat = false,
 			command = true,
-			model = { model = "gpt-5-nano", temperature = 0.8, top_p = 1 },
+			model = { model = "gpt-5-nano" },
 			system_prompt = require("gp.defaults").code_system_prompt,
 		},
 		{
@@ -161,7 +164,7 @@ require("gp").setup({
 			name = "ChatGPT5-Nano",
 			chat = true,
 			command = false,
-			model = { model = "gpt-5-nano", temperature = 1, top_p = 1 },
+			model = { model = "gpt-5-nano" },
 			system_prompt = require("gp.defaults").chat_system_prompt,
 		},
 		{
@@ -231,11 +234,11 @@ require("gp").setup({
 			vim.list_extend(custom_state, { "chat_agent", "command_agent" })
 			local all_agents = gp.agents
 			local all_agents_name = vim.tbl_keys(all_agents)
-			local picker_agent_state = function(state)
+			local picker_agent_state = function(st)
 				local select_agent_items = all_agents_name
-				if state == "chat_agent" then
+				if st == "chat_agent" then
 					select_agent_items = gp._chat_agents
-				elseif state == "command_agent" then
+				elseif st == "command_agent" then
 					select_agent_items = gp._command_agents
 				end
 				local items = vim.tbl_map(function(value)
@@ -265,7 +268,7 @@ require("gp").setup({
 					end,
 					confirm = function(picker, item)
 						picker:close()
-						gp.set_agent_state(state, item.text)
+						gp.set_agent_state(st, item.text)
 					end,
 				})
 			end
@@ -324,7 +327,9 @@ require("gp").setup({
 					input = {
 						keys = {
 							["<c-d>"] = { "delect_file", mode = { "n", "i" } },
-							["<c-f>"] = { "edit_popup", mode = { "n", "i" } },
+							["<c-f>"] = { "edit_popup_not_list", mode = { "n", "i" } },
+							["<c-v>"] = { "edit_vsplit_not_list", mode = { "n", "i" } },
+							["<c-s>"] = { "edit_split_not_list", mode = { "n", "i" } },
 							["<c-t>"] = { "tab", mode = { "n", "i" } },
 						},
 					},
@@ -469,6 +474,9 @@ require("gp").setup({
 					-- 启动动画
 					local function start_spinner()
 						timer = vim.loop.new_timer()
+						if timer == nil then
+							return
+						end
 						timer:start(100, 100, function()
 							vim.schedule(function()
 								if win and win:valid() then

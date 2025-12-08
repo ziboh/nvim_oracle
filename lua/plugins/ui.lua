@@ -15,7 +15,7 @@ require("bufferline").setup({
 			Snacks.bufdelete(n)
 		end,
 		diagnostics = "nvim_lsp",
-		always_show_bufferline = false,
+		always_show_bufferline = true,
 		diagnostics_indicator = function(_, _, diag)
 			local icons = Utils.icons.diagnostics
 			local ret = (diag.error and icons.Error .. diag.error .. " " or "")
@@ -35,6 +35,9 @@ require("bufferline").setup({
 		},
 	},
 })
+
+vim.api.nvim_set_hl(0, "BufferLineSeparator", { fg = "#45aff5" })
+vim.api.nvim_set_hl(0, "BufferLineIndicatorSelected", { fg = "#45aff5" })
 
 local keys = {
 	{ "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },

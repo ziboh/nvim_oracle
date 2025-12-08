@@ -14,6 +14,7 @@ return { -- statusline
   components.RightPadding(components.ShowCmd),
   -- components.RightPadding(components.LSPActive),
   components.RightPadding(components.Lsp, 1),
+  components.RightPadding(components.Rime, 1),
   components.RightPadding(components.SuperMaven, 1),
   components.RightPadding(components.FileCode),
   -- components.RightPadding(components.FileType, 0),

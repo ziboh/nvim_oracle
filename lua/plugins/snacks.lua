@@ -28,6 +28,36 @@ local opts = {
 					height = 30,
 					bo = {
 						buftype = "",
+						buflisted = true,
+						bufhidden = "hide",
+						swapfile = false,
+						modifiable = true,
+					},
+					minimal = false,
+					noautocmd = false,
+					zindex = 20,
+					wo = {
+						winhighlight = "NormalFloat:Normal",
+					},
+					border = "rounded",
+					title_pos = "center",
+					footer_pos = "center",
+				})
+				-- HACK: this should fix folds
+				if vim.wo.foldmethod == "expr" then
+					vim.schedule(function()
+						vim.opt.foldmethod = "expr"
+					end)
+				end
+			end,
+			edit_popup_not_list = function(picker, item)
+				picker:close()
+				Snacks.win({
+					file = item._path,
+					width = 100,
+					height = 30,
+					bo = {
+						buftype = "",
 						buflisted = false,
 						bufhidden = "hide",
 						swapfile = false,
@@ -61,6 +91,75 @@ local opts = {
 						winhighlight = "NormalFloat:Normal",
 					},
 					bo = {
+						buflisted = true,
+						modifiable = true,
+					},
+				})
+
+				-- HACK: this should fix folds
+				if vim.wo.foldmethod == "expr" then
+					vim.schedule(function()
+						vim.opt.foldmethod = "expr"
+					end)
+				end
+			end,
+			edit_vsplit_not_list = function(picker, item)
+				picker:close()
+				Snacks.win({
+					file = item._path,
+					position = "right",
+					width = 0.5,
+					minimal = false,
+					wo = {
+						winhighlight = "NormalFloat:Normal",
+					},
+					bo = {
+						modifiable = true,
+					},
+				})
+
+				-- HACK: this should fix folds
+				if vim.wo.foldmethod == "expr" then
+					vim.schedule(function()
+						vim.opt.foldmethod = "expr"
+					end)
+				end
+			end,
+			edit_split = function(picker, item)
+				picker:close()
+				Snacks.win({
+					file = item._path,
+					position = "bottom",
+					height = 0.5,
+					minimal = false,
+					wo = {
+						winhighlight = "NormalFloat:Normal",
+					},
+					bo = {
+						buflisted = true,
+						modifiable = true,
+					},
+				})
+
+				-- HACK: this should fix folds
+				if vim.wo.foldmethod == "expr" then
+					vim.schedule(function()
+						vim.opt.foldmethod = "expr"
+					end)
+				end
+			end,
+			edit_split_not_list = function(picker, item)
+				picker:close()
+				Snacks.win({
+					file = item._path,
+					position = "bottom",
+					height = 0.5,
+					minimal = false,
+					wo = {
+						winhighlight = "NormalFloat:Normal",
+					},
+					bo = {
+						buflisted = false,
 						modifiable = true,
 					},
 				})
@@ -719,20 +818,6 @@ local keys = {
 			Snacks.picker.lsp_type_definitions()
 		end,
 		desc = "Goto T[y]pe Definition",
-	},
-	{
-		"<leader>ss",
-		function()
-			Snacks.picker.lsp_symbols()
-		end,
-		desc = "LSP Symbols",
-	},
-	{
-		"<leader>sS",
-		function()
-			Snacks.picker.lsp_workspace_symbols()
-		end,
-		desc = "LSP Workspace Symbols",
 	},
 	{
 		"<leader>fn",

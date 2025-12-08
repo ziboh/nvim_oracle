@@ -1,6 +1,6 @@
 --- @class UserUtils
 --- @field icons utils.icons
---- @field lsp utils.lsp
+--- @field rime utils.rime
 local M = {}
 
 _G.Utils = M
@@ -275,4 +275,81 @@ function M.PrintTable(t, indent, visited)
 	vim.notify(M.tableToString(t, indent, visited))
 end
 
+function M.is_port_in_use(port)
+	local command
+	local os_name = vim.loop.os_uname().sysname
+
+	-- 根据操作系统选择不同的命令
+	if os_name == "Linux" then
+		-- 只查找 LISTEN 状态的端口，使用更精确的匹配
+		command = string.format("ss -tuln state listening | grep ':\\b%d\\b'", port)
+	elseif os_name == "Windows_NT" then
+		-- 在 Windows 下专门查找 LISTENING 状态的端口
+		command = string.format('netstat -an | findstr /R /C:":%d.*LISTENING"', port)
+	else
+		print("Unsupported operating system")
+		return false
+	end
+
+	-- 执行命令并获取输出
+	local handle = io.popen(command)
+	if not handle then
+		print("Failed to execute command")
+		return false
+	end
+
+	local result = handle:read("*a")
+	local success, _ = handle:close()
+
+	if not success then
+		print("Failed to close handle")
+		return false
+	end
+
+	-- 判断输出是否包含端口信息
+	return result and result:match("%S") ~= nil
+end
+
+-- 创建一个函数来关闭指定端口的进程
+function M.win_close_port(port)
+	-- 获取占用端口的进程信息
+	local handle = io.popen(string.format("netstat -ano | findstr :%d", port))
+	local result = ""
+	if handle ~= nil then
+		result = handle:read("*a")
+		handle:close()
+	end
+
+	-- 如果没有找到进程
+	if result == "" then
+		print("No process found using port " .. port)
+		return
+	end
+
+	-- 从结果中提取 PID
+	-- netstat 输出格式类似：TCP    0.0.0.0:9928    0.0.0.0:0    LISTENING    1234
+	local pid = result:match("%d+%s*$"):gsub("%s+", "")
+
+	if pid then
+		-- 使用 taskkill 命令关闭进程
+		local cmd = string.format("taskkill /PID %s /F", pid)
+		local kill_handle = io.popen(cmd)
+		if kill_handle ~= nil then
+			local kill_result = kill_handle:read("*a"):gsub("%s+$", "")
+			kill_handle:close()
+			Snacks.notify(kill_result)
+		end
+	else
+		print("Could not find PID for port " .. port)
+	end
+end
+
+--- @param keys string
+--- @param mode string
+function M.feedkeys(keys, mode)
+  -- 将按键序列转换为 Neovim 内部格式
+  local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
+  -- Send the converted key sequence to Neovim's input buffer.
+  vim.api.nvim_feedkeys(termcodes, mode, false)
+end
 return M

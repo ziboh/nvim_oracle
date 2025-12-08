@@ -1,12 +1,12 @@
 require("utils")
 require("config.options")
+require("plugins.snacks")
 require("config.keymaps")
 require("config.autocmd")
 require("config.folding")
 require("config.lsp")
 
 require("plugins.catppuccin")
-require("plugins.snacks")
 require("plugins.ui")
 require("plugins.which-key")
 require("plugins.sudo")

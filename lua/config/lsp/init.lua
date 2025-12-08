@@ -83,7 +83,9 @@ if not Utils.is_memory_less_than() then
 				keys = {
 					{
 						"gd",
-						vim.lsp.buf.definition,
+						function()
+							Snacks.picker.lsp_definitions()
+						end,
 						desc = "Goto Definition",
 						has = "definition",
 					},
@@ -148,6 +150,24 @@ if not Utils.is_memory_less_than() then
 						mode = { "n" },
 						has = "codeLens",
 					},
+
+					{
+						"<leader>ss",
+						function()
+							Snacks.picker.lsp_symbols()
+						end,
+						mode = { "n", "v" },
+						desc = "LSP Symbols",
+						has = "documentSymbol",
+					},
+					{
+						"<leader>sS",
+						function()
+							Snacks.picker.lsp_workspace_symbols()
+						end,
+						mode = { "n", "v" },
+						desc = "workspace/symbol",
+					},
 					{
 						"<leader>lR",
 						function()
@@ -187,52 +207,12 @@ if not Utils.is_memory_less_than() then
 					},
 				},
 			},
-			lua_ls = {
-				cmd = { "lua-language-server", "--locale=zh-cn" },
-				settings = {
-					Lua = {
-						diagnostics = {
-							disable = {
-								"trailing-space",
-							},
-						},
-						workspace = {
-							checkThirdParty = false,
-						},
-						codeLens = {
-							enable = true,
-						},
-						completion = {
-							callSnippet = "Replace",
-						},
-						doc = {
-							privateName = { "^_" },
-						},
-						hint = {
-							enable = true,
-							setType = false,
-							paramType = true,
-							paramName = "Disable",
-							semicolon = "Disable",
-							arrayIndex = "Disable",
-						},
-					},
-				},
-				keys = {
-					{
-						"<leader>tt",
-						function()
-							Snacks.notify("lua_ls 测试")
-						end,
-						desc = "Code Action",
-						mode = { "n", "v" },
-					},
-				},
-			},
+			lua_ls = {},
 			bashls = {
 				mason = true,
 				filetypes = { "sh", "bash" },
 			},
+			rime_ls = require("config.lsp.rime").rime_ls.servers,
 			nushell = {},
 			eslint = {
 				settings = {
@@ -243,9 +223,13 @@ if not Utils.is_memory_less_than() then
 			stylua = {
 				enabled = false,
 			},
+			copolit = {},
 		},
-		setup = {},
+		setup = {
+			rime_ls = require("config.lsp.rime").rime_ls.setup,
+		},
 	}
+
 	vim.keymap.set("n", "<leader>ll", function()
 		Snacks.picker.lsp_config()
 	end, { desc = "Lsp Info", silent = true, noremap = true })

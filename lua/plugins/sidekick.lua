@@ -3,6 +3,7 @@ vim.pack.add({
 })
 
 local opts = {
+    nes = { enabled = false },
 	cli = {
 		prompts = {
 			changes = "你能审查我的更改吗？",

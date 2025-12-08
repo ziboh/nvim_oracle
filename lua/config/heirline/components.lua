@@ -111,6 +111,51 @@ M.FileCode = {
 		end,
 	},
 }
+M.Rime = {
+	condition = function()
+		local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+		for _, client in ipairs(clients) do
+			if client.name == "rime_ls" then
+				return true
+			end
+		end
+		return false
+	end,
+	{
+		on_click = {
+			name = "heirline_rime",
+			callback = function()
+				vim.cmd("RimeToggle")
+			end,
+		},
+		{
+			flexible = 10,
+			static = {
+				icon = " ",
+				text = "Rime",
+				enabled_hl = { fg = "#98bb6c", bold = true },
+				disabled_hl = { fg = "#ed8796", bold = true },
+			},
+			init = function(self)
+				if vim.g.rime_enabled then
+					self.hl = self.enabled_hl
+				else
+					self.hl = self.disabled_hl
+				end
+			end,
+			{
+				provider = function(self)
+					return self.icon .. self.text
+				end,
+			},
+			{
+				provider = function(self)
+					return self.icon
+				end,
+			},
+		},
+	},
+}
 M.SuperMaven = {
 	on_click = {
 		name = "heirline_supermaven",
@@ -205,7 +250,7 @@ M.Mode = {
 			Rv = "V-RPLC",
 			Rvc = "Rv",
 			Rvx = "Rv",
-			c = "",
+			c = "CMD",
 			cv = "Ex",
 			r = "...",
 			rm = "M",
@@ -307,7 +352,7 @@ M.Lsp = {
 	condition = conditions.lsp_attached,
 	init = function(self)
 		local names = {}
-		self.ignore_lsp = { "rime_ls", "copilot" }
+		self.ignore_lsp = { "rime_ls" }
 		local lsp_filtered_table = {}
 
 		for _, server in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
@@ -496,53 +541,6 @@ M.Diagnostics = {
 	-- },
 } -- Diagnostics
 
-M.FileIcon = {
-	condition = function(self)
-		return vim.fn.fnamemodify(self.filename, ":.") ~= ""
-	end,
-	init = function(self)
-		self.is_modified = vim.api.nvim_get_option_value("modified", { buf = self.bufnr })
-		local filename = self.filename
-		local extension = vim.fn.fnamemodify(filename, ":e")
-		local icon, hl, _ = MiniIcons.get("file", "file." .. extension)
-		local bt = vim.api.nvim_get_option_value("buftype", { buf = self.bufnr }) or nil
-		if bt and bt == "terminal" then
-			icon = ""
-		end
-		self.icon = icon
-		self.icon_color = string.format("#%06x", vim.api.nvim_get_hl(0, { name = hl })["fg"])
-	end,
-	provider = function(self)
-		return self.icon and (self.icon .. " ")
-	end,
-	hl = function(self)
-		return { fg = self.is_modified and self.icon_color or dim_color }
-	end,
-}
--- we redefine the filename component, as we probably only want the tail and not the relative path
-M.FileName = {
-	init = function(self)
-		self.is_modified = vim.api.nvim_get_option_value("modified", { buf = self.bufnr })
-		local filename = self.filename
-		local extension = vim.fn.fnamemodify(filename, ":e")
-		local _, hl, _ = MiniIcons.get("file", "file." .. extension)
-		self.icon_color = string.format("#%06x", vim.api.nvim_get_hl(0, { name = hl })["fg"])
-	end,
-	provider = function(self)
-		-- self.filename will be defined later, just keep looking at the example!
-		local filename = self.filename
-		filename = filename == "" and vim.bo.filetype or vim.fn.fnamemodify(filename, ":t")
-		return "" .. filename .. ""
-	end,
-	hl = function(self)
-		return {
-			-- fg = self.is_modified and palette.yellow or palette.surface2,
-			fg = self.is_modified and self.icon_color or dim_color,
-			italic = self.is_modified,
-		}
-	end,
-}
-
 -- we redefine the filename component, as we probably only want the tail and not the relative path
 M.FilePath = {
 	provider = function(self)
@@ -567,50 +565,6 @@ M.FilePath = {
 			italic = self.is_active,
 		}
 	end,
-}
-
--- this looks exactly like the FileFlags component that we saw in
--- #crash-course-part-ii-filename-and-friends, but we are indexing the bufnr explicitly
--- also, we are adding a nice icon for terminal buffers.
-M.FileFlags = {
-	{
-		init = function(self)
-			local filename = self.filename
-			local extension = vim.fn.fnamemodify(filename, ":e")
-			local _, hl, _ = MiniIcons.get("file", "file." .. extension)
-			self.icon_color = string.format("#%06x", vim.api.nvim_get_hl(0, { name = hl })["fg"])
-		end,
-		condition = function(self)
-			local ignored_filetypes = {
-				"dap-repl",
-			}
-			local result = vim.fn.fnamemodify(self.filename, ":.") ~= ""
-				and vim.api.nvim_get_option_value("modified", { buf = self.bufnr })
-			local ft = vim.api.nvim_get_option_value("buftype", { buf = self.bufnr })
-			if vim.tbl_contains(ignored_filetypes, ft) then
-				result = false
-			end
-			return result
-		end,
-		provider = " [+]",
-		hl = function(self)
-			return { fg = self.icon_color, bold = self.is_active }
-		end,
-	},
-	{
-		condition = function(self)
-			return not vim.api.nvim_get_option_value("modifiable", { buf = self.bufnr })
-				or vim.api.nvim_get_option_value("readonly", { buf = self.bufnr })
-		end,
-		provider = function(self)
-			if vim.api.nvim_get_option_value("buftype", { buf = self.bufnr }) == "terminal" then
-				return ""
-			else
-				return " "
-			end
-		end,
-		hl = { fg = palette.text },
-	},
 }
 
 M.Overseer = {
