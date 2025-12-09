@@ -111,14 +111,14 @@ function M.setup(opts)
 		vim.lsp.config.rime_ls = {
 			name = "rime_ls",
 			cmd = vim.lsp.rpc.connect("127.0.0.1", port),
-            filetypes = filetypes,
+			filetypes = filetypes,
 			single_file_support = true,
 		}
 	else
 		vim.notify("未能启动 rime_ls，跳过 LSP 配置", vim.log.levels.WARN)
 	end
 	vim.api.nvim_create_autocmd("User", {
-		pattern = "BlinkDown",
+		pattern = "BlinkLoaded",
 		callback = function()
 			require("blink.cmp.completion.list").show_emitter:on(function(event)
 				if not vim.g.rime_enabled then
@@ -140,6 +140,7 @@ function M.setup(opts)
 				end)
 			end)
 		end,
+		once = true,
 	})
 end
 

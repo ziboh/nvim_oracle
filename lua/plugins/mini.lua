@@ -1,9 +1,6 @@
 vim.pack.add({
-	{ src = "https://github.com/nvim-mini/mini.pairs" },
 	{ src = "https://github.com/nvim-mini/mini.icons" },
 })
-
-require("mini.pairs").setup()
 
 package.preload["nvim-web-devicons"] = function()
 	require("mini.icons").mock_nvim_web_devicons()

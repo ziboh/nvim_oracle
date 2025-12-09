@@ -8,4 +8,10 @@ vim.filetype.add({
 	},
 })
 
-require("kulala").setup()
+vim.api.nvim_create_autocmd("Filetype", {
+	pattern = "http",
+	callback = function()
+		require("kulala").setup()
+	end,
+	once = true,
+})
