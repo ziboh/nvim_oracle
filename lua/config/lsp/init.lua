@@ -67,15 +67,14 @@ end
 
 vim.diagnostic.config(diagnostics)
 vim.keymap.set("n", "<leader>pm", "<cmd>Mason<cr>", { remap = true, desc = "Mason" })
-Utils.create_autocmd_once("BufEnter", {
+local lsp_loaded = false
+Utils.create_autocmd_once({ "BufReadPre", "FileType" }, {
 	callback = function()
+		if lsp_loaded then
+			return
+		end
+		lsp_loaded = true
 		if not Utils.is_memory_less_than() then
-			vim.pack.add({
-				{ src = "https://github.com/mason-org/mason.nvim" },
-				{ src = "https://github.com/neovim/nvim-lspconfig" },
-				{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
-			})
-
 			local opts = {
 				servers = {
 					-- configuration for all lsp servers
@@ -222,6 +221,7 @@ Utils.create_autocmd_once("BufEnter", {
 						filetypes = { "sh", "bash" },
 					},
 					rime_ls = require("config.lsp.rime").rime_ls.servers,
+					autohotkey_lsp = require("config.lsp.autohotkey").autohotkey_lsp.servers,
 					nushell = {},
 					eslint = {
 						settings = {
@@ -236,6 +236,7 @@ Utils.create_autocmd_once("BufEnter", {
 				},
 				setup = {
 					rime_ls = require("config.lsp.rime").rime_ls.setup,
+					autohotkey_lsp = require("config.lsp.autohotkey").autohotkey_lsp.setup,
 				},
 			}
 
