@@ -220,8 +220,6 @@ Utils.create_autocmd_once({ "BufReadPre", "FileType" }, {
 						mason = true,
 						filetypes = { "sh", "bash" },
 					},
-					rime_ls = require("config.lsp.rime").rime_ls.servers,
-					autohotkey_lsp = require("config.lsp.autohotkey").autohotkey_lsp.servers,
 					nushell = {},
 					eslint = {
 						settings = {
@@ -234,11 +232,18 @@ Utils.create_autocmd_once({ "BufReadPre", "FileType" }, {
 					},
 					copolit = {},
 				},
-				setup = {
-					rime_ls = require("config.lsp.rime").rime_ls.setup,
-					autohotkey_lsp = require("config.lsp.autohotkey").autohotkey_lsp.setup,
-				},
+				setup = {},
 			}
+
+			local lspconfig_path = vim.fs.joinpath(vim.fn.stdpath("config"), "lua/config/lsp")
+			local lsp_config_filename = vim.fn.readdir(lspconfig_path)
+			vim.tbl_map(function(file)
+				if file ~= "init.lua" and file:match("%.lua$") then
+					local filename = file:gsub("%.lua$", "")
+					local lsp_opts = require("config.lsp." .. filename)
+					opts = vim.tbl_deep_extend("force", opts, lsp_opts)
+				end
+			end, lsp_config_filename)
 
 			vim.keymap.set("n", "<leader>ll", function()
 				Snacks.picker.lsp_config()

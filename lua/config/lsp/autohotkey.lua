@@ -58,8 +58,8 @@ local install_ahk2_lsp = function(callback)
 end
 
 local opts = {
-	autohotkey_lsp = {
-		servers = {
+	servers = {
+		autohotkey_lsp = {
 			enabled = Utils.is_win(),
 			cmd = {
 				"node",
@@ -70,7 +70,9 @@ local opts = {
 				locale = "zh-cn",
 			},
 		},
-		setup = function(_, opts)
+	},
+	setup = {
+		autohotkey_lsp = function(_, opts)
 			local server_path = vim.fn.expand(vim.fn.stdpath("data") .. "/vscode-autohotkey2-lsp/server/dist/server.js")
 			if vim.fn.filereadable(server_path) == 1 then
 				return

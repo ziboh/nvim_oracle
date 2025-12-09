@@ -25,6 +25,7 @@ local rclone_sync = function(src, dst, callback)
 		end,
 	})
 end
+
 -- Return if rime_ls should be disabled in current context
 local rime_ls_disabled = function(context)
 	local line = context.line
@@ -44,6 +45,7 @@ local rime_ls_disabled = function(context)
 	end
 	return false
 end
+
 local rime_on_attach = function(client, _)
 	local mapped_punc = {
 		[","] = "，",
@@ -126,8 +128,8 @@ local rime_on_attach = function(client, _)
 end
 
 local opts = {
-	rime_ls = {
-		servers = {
+	servers = {
+		rime_ls = {
 			offset_encoding = "utf-8",
 			on_attach = rime_on_attach,
 			init_options = {
@@ -140,7 +142,9 @@ local opts = {
 				schema_trigger_character = "&",
 			},
 		},
-		setup = function(_, _)
+	},
+	setup = {
+		rime_ls = function(_, _)
 			if vim.fn.executable("rime_ls") ~= 1 then
 				Snacks.notify.warn("Rime LSP is not installed", { title = "Rime LSP" })
 				return true
