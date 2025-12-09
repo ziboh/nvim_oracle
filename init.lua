@@ -3,7 +3,7 @@ require("config.options")
 require("plugins.snacks")
 require("config.keymaps")
 require("config.autocmd")
-require("config.folding")
+-- require("config.folding")
 require("config.lsp")
 
 require("plugins.catppuccin")

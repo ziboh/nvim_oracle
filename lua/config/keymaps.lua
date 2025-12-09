@@ -8,8 +8,6 @@ vim.keymap.set("n", "J", "<NOP>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-b>", "<NOP>", { noremap = true, silent = true })
 vim.keymap.set("n", "<tab>", "w", { noremap = true, silent = true })
 
-vim.keymap.set("n", "L", "$", { noremap = true, silent = true, desc = "Move to end of line" })
-vim.keymap.set("n", "H", "^", { noremap = true, silent = true, desc = "Move to first non-blank character" })
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { noremap = true, silent = true, desc = "Increase window height" })
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { noremap = true, silent = true, desc = "Decrease window height" })
 vim.keymap.set("n", "M", "J", { noremap = true, silent = true, desc = "Join the current line with the next line" })
