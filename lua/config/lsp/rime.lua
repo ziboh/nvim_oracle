@@ -88,7 +88,7 @@ local rime_on_attach = function(client, _)
 	end, { nargs = 0 })
 
 	vim.api.nvim_create_user_command("RimeToggle", function()
-		client:request("workspace/executeCommand", { command = "rime-ls.toggle-rime" }, function(_, result, ctx)
+		client:request("workspace/executeCommand", { command = "rime-ls.toggle-rime" }, function()
 			if vim.g.rime_enabled then
 				for k, _ in pairs(mapped_punc) do
 					map_del({ "i" }, k .. "<space>")
@@ -109,22 +109,22 @@ local rime_on_attach = function(client, _)
 					end)
 				end
 			end
-			if ctx.client_id == client.id then
-				vim.g.rime_enabled = result
-				if result then
-					Snacks.notify("Rime Enabled", { title = "Rime", timeout = 3000 })
-				else
-					Snacks.notify.warn("Rime Disabled", { title = "Rime", timeout = 3000 })
-				end
-			end
 		end)
 	end, { nargs = 0 })
-	-- Toggle rime
-	-- This will toggle Chinese punctuations too
-	map_set({ "n", "i" }, "<C-M-f12>", function()
-		-- We must check the status before the toggle
-		vim.cmd("RimeToggle")
-	end)
+
+	Snacks.toggle({
+		name = "Rime",
+		get = function()
+			return vim.g.rime_enabled
+		end,
+		set = function(enabled)
+			if enabled then
+				vim.g.rime_enabled = true
+			else
+				vim.g.rime_enabled = false
+			end
+		end,
+	}):map("<C-M-F12>")
 end
 
 local opts = {
