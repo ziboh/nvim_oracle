@@ -29,7 +29,7 @@ vim.api.nvim_create_autocmd("TermLeave", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("CmdLineEnter", {
+vim.api.nvim_create_autocmd("CmdlineEnter", {
 	group = group,
 	pattern = "*",
 	callback = function()
@@ -37,7 +37,7 @@ vim.api.nvim_create_autocmd("CmdLineEnter", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("CmdLineLeave", {
+vim.api.nvim_create_autocmd("CmdlineLeave", {
 	group = group,
 	pattern = "*",
 	callback = function()

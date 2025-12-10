@@ -14,6 +14,12 @@ Utils.create_autocmd_once("Filetype", {
 				-- Conform will run the first available formatter
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 			},
+			default_format_opts = {
+				lsp_format = "fallback", -- 当没有其他格式化程序时使用 LSP
+			},
+			format_on_save = {
+				lsp_format = "fallback",
+			},
 		})
 		vim.keymap.set("n", "<leader>lf", function()
 			require("conform").format()

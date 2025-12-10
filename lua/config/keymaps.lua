@@ -90,7 +90,18 @@ vim.keymap.set("n", "<leader>ld", function()
 end, { noremap = true, silent = true, desc = "Hover diagnostics" })
 
 -- 关闭缓冲区
-vim.keymap.set("n", "<leader>c", function() Snacks.bufdelete() end, { noremap = true, silent = true, desc = "Close buffer" })
+vim.keymap.set("n", "<leader>c", function()
+	-- 获取所有 listed buffer 的数量（忽略 unloaded 或 hidden buffer）
+	local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+	if #bufs > 1 then
+		-- 如果不止一个 buffer，正常删除当前 buffer
+		Snacks.bufdelete()
+	else
+		-- 如果只剩最后一个，先关闭buffer(如果未保存会弹出确定窗口)，直接退出 Neovim
+		Snacks.bufdelete()
+		vim.cmd("q")
+	end
+end, { noremap = true, silent = true, desc = "Close buffer or quit" })
 
 -- tabs
 vim.keymap.set("n", "<leader><tab>l", "<cmd>tablast<cr>", { noremap = true, silent = true, desc = "Last Tab" })

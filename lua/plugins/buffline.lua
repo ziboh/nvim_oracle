@@ -11,6 +11,7 @@ Utils.create_autocmd_once({ "BufReadPre", "BufNewFile" }, {
 				right_mouse_command = function(n)
 					Snacks.bufdelete(n)
 				end,
+				separator_style = { "", "" },
 				diagnostics = "nvim_lsp",
 				always_show_bufferline = true,
 				diagnostics_indicator = function(_, _, diag)

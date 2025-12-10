@@ -347,21 +347,28 @@ end
 --- @param keys string
 --- @param mode string
 function M.feedkeys(keys, mode)
-  -- 将按键序列转换为 Neovim 内部格式
-  local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
-  -- Send the converted key sequence to Neovim's input buffer.
-  vim.api.nvim_feedkeys(termcodes, mode, false)
+	-- 将按键序列转换为 Neovim 内部格式
+	local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
+	-- Send the converted key sequence to Neovim's input buffer.
+	vim.api.nvim_feedkeys(termcodes, mode, false)
 end
 
+--- 创建一次性自动命令
+--- 此函数是对 `vim.api.nvim_create_autocmd` 的封装，强制设置 `once = true`，
+--- 确保自动命令在触发一次后自动删除，避免重复执行。
+---
+--- @param event vim.api.keyset.events|vim.api.keyset.events[] 触发处理程序的事件或事件列表（`callback` 或 `command`）。
+--- @param opts vim.api.keyset.create_autocmd 选项字典：
+--- @return integer 返回创建的自动命令ID，可用于后续删除（如 `nvim_del_autocmd`）
 function M.create_autocmd_once(event, opts)
-    -- 确保 opts 是一个 table
-    opts = opts or {}
-    
-    -- 设置 once = true
-    opts.once = true
-    
-    -- 调用原始函数
-    return vim.api.nvim_create_autocmd(event, opts)
+	-- 确保 opts 是一个 table
+	opts = opts or {}
+
+	-- 设置 once = true
+	opts.once = true
+
+	-- 调用原始函数
+	return vim.api.nvim_create_autocmd(event, opts)
 end
 
 return M
