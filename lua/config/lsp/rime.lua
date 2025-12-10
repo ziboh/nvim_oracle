@@ -113,17 +113,20 @@ local rime_on_attach = function(client, _)
 		end)
 	end, { nargs = 0 })
 
-	Snacks.toggle({
-		name = "Rime",
-		get = function()
-			return vim.g.rime_enabled
-		end,
-		set = function(enabled)
-			if enabled ~= vim.g.rime_enabled then
-				vim.cmd("RimeToggle")
-			end
-		end,
-	}):map("<C-M-F12>", { mode = { "n", "i" } })
+	Snacks.toggle
+		.new({
+			id = "rime",
+			name = "Rime",
+			get = function()
+				return vim.g.rime_enabled
+			end,
+			set = function(enabled)
+				if enabled ~= vim.g.rime_enabled then
+					vim.cmd("RimeToggle")
+				end
+			end,
+		})
+		:map("<C-M-F12>", { mode = { "n", "i" } })
 end
 
 local opts = {

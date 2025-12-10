@@ -14,18 +14,21 @@ Utils.create_autocmd_once("InsertEnter", {
 
 		require("supermaven-nvim").setup(opts)
 
-		Snacks.toggle({
-			name = "SuperMaven",
-			get = function()
-				return vim.g.supermaven_enabled
-			end,
-			set = function(enabled)
-				if enabled then
-					vim.g.supermaven_enabled = true
-				else
-					vim.g.supermaven_enabled = false
-				end
-			end,
-		}):map("<leader>as")
+		Snacks.toggle
+			.new({
+				id = "supermaven",
+				name = "SuperMaven",
+				get = function()
+					return vim.g.supermaven_enabled
+				end,
+				set = function(enabled)
+					if enabled then
+						vim.g.supermaven_enabled = true
+					else
+						vim.g.supermaven_enabled = false
+					end
+				end,
+			})
+			:map("<leader>as")
 	end,
 })

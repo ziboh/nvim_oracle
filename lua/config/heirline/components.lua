@@ -124,12 +124,7 @@ M.Rime = {
 	on_click = {
 		name = "heirline_rime",
 		callback = function()
-			if vim.g.rime_enabled == true then
-				Snacks.notify.warn("Disabled Rime", { title = "Rime" })
-			else
-				Snacks.notify("Enabled Rime", { title = "Rime" })
-			end
-			vim.cmd("RimeToggle")
+			Snacks.toggle.get("rime"):toggle()
 		end,
 	},
 	flexible = 10,
