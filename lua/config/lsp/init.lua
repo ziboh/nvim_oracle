@@ -17,6 +17,8 @@ local mason_opts = {
 	ensure_installed = {
 		"stylua",
 		"shfmt",
+		"prettierd",
+		"ruff",
 	},
 }
 require("mason").setup(mason_opts)

@@ -1,5 +1,5 @@
 vim.pack.add({
-	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
+	"https://github.com/MeanderingProgrammer/render-markdown.nvim",
 })
 vim.api.nvim_set_hl(0, "RenderMarkdownCode", { bg = "#282c34" })
 vim.api.nvim_set_hl(0, "RenderMarkdownCodeInline", { bg = "#282c34" })
@@ -10,6 +10,15 @@ Utils.create_autocmd_once("FileType", {
 		local opts = {
 			file_types = { "markdown", "Avante" },
 			quote = { repeat_linebreak = true },
+			anti_conceal = {
+				disabled_modes = { "n" },
+			},
+			completions = {
+				-- Settings for blink.cmp completions source
+				blink = { enabled = true },
+				-- Settings for in-process language server completions
+				lsp = { enabled = true },
+			},
 			win_options = {
 				showbreak = { default = "", rendered = "  " },
 				breakindent = { default = false, rendered = true },
