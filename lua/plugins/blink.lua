@@ -1,9 +1,11 @@
 vim.pack.add({
 	{ src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.x") },
+	"https://github.com/xzbdmw/colorful-menu.nvim",
 	"https://github.com/saghen/blink.compat",
 })
 Utils.create_autocmd_once("InsertEnter", {
 	callback = function()
+		require("colorful-menu").setup({})
 		local opts = {
 			completion = {
 				accept = {
@@ -24,6 +26,14 @@ Utils.create_autocmd_once("InsertEnter", {
 							{ "source_name" },
 						},
 						components = {
+							label = {
+								text = function(ctx)
+									return require("colorful-menu").blink_components_text(ctx)
+								end,
+								highlight = function(ctx)
+									return require("colorful-menu").blink_components_highlight(ctx)
+								end,
+							},
 							source_name = {
 								text = function(ctx)
 									return "[" .. ctx.source_name .. "]"
@@ -38,11 +48,6 @@ Utils.create_autocmd_once("InsertEnter", {
 								highlight = function(ctx)
 									local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
 									return hl
-								end,
-							},
-							kind = {
-								text = function(ctx)
-									return "<" .. ctx.kind .. ">"
 								end,
 							},
 						},

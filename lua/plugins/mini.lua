@@ -1,6 +1,7 @@
 vim.pack.add({
-	{ src = "https://github.com/nvim-mini/mini.icons" },
 	"https://github.com/nvim-mini/mini.hipatterns",
+	"https://github.com/nvim-mini/mini.icons",
+	"https://github.com/nvim-mini/mini.pairs",
 })
 
 Utils.create_autocmd_once({ "BufReadPre", "BufNewFile" }, {
@@ -17,6 +18,29 @@ Utils.create_autocmd_once({ "BufReadPre", "BufNewFile" }, {
 				hex_color = hipatterns.gen_highlighter.hex_color(),
 			},
 		})
+	end,
+})
+
+local pairs_loaded = false
+Utils.create_autocmd_once({ "InsertEnter", "CmdlineEnter" }, {
+	callback = function()
+		if pairs_loaded == true then
+			return
+		end
+		pairs_loaded = true
+		local opts = {
+			modes = { insert = true, command = true, terminal = false },
+			-- skip autopair when next character is one of these
+			skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
+			-- skip autopair when the cursor is inside these treesitter nodes
+			skip_ts = { "string" },
+			-- skip autopair when next character is closing pair
+			-- and there are more closing pairs than opening pairs
+			skip_unbalanced = true,
+			-- better deal with markdown code blocks
+			markdown = true,
+		}
+		Utils.mini.pairs(opts)
 	end,
 })
 

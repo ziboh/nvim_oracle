@@ -1,6 +1,7 @@
 --- @class UserUtils
 --- @field icons utils.icons
 --- @field rime utils.rime
+--- @field mini utils.mini
 local M = {}
 
 _G.Utils = M
