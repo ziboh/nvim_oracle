@@ -389,5 +389,122 @@ function M.on_attach(on_attach, name)
 		end,
 	})
 end
+function M.install_topiary()
+	if vim.fn.executable("topiary") == 1 then
+		Snacks.notify("topiary 已安装", { title = "Install Topiary" })
+		return
+	end
+
+	Snacks.notify("正在获取最新 topiary 版本...", { title = "Install Topiary" })
+
+	local api_url = "https://api.github.com/repos/tweag/topiary/releases/latest"
+	local curl_cmd = 'curl -s -H "Accept: application/vnd.github.v3+json" ' .. api_url
+
+	local output = {}
+	local job_id = vim.fn.jobstart(curl_cmd, {
+		stdout_buffered = true,
+		on_stdout = function(_, data)
+			vim.list_extend(output, data)
+		end,
+		on_exit = function(_, code)
+			if code ~= 0 then
+				Snacks.notify.error("获取最新版本失败，错误码: " .. code, { title = "Install Topiary" })
+				return
+			end
+
+			local json_str = table.concat(output, "\n")
+			local ok, release = pcall(vim.json.decode, json_str)
+			if not ok or not release.tag_name then
+				Snacks.notify.error("解析 release 信息失败", { title = "Install Topiary" })
+				return
+			end
+
+			local version = release.tag_name
+			Snacks.notify("最新版本: " .. version .. "，正在安装...", { title = "Install Topiary" })
+
+			local script
+			if vim.fn.has("win32") == 1 then
+				script = 'powershell -ExecutionPolicy Bypass -c "irm https://github.com/tweag/topiary/releases/download/'
+					.. version
+					.. '/topiary-cli-installer.ps1 | iex"'
+			else
+				script = "curl --proto '=https' --tlsv1.2 -LsSf https://github.com/tweag/topiary/releases/download/"
+					.. version
+					.. "/topiary-cli-installer.sh | sh"
+			end
+
+			local install_job_id = vim.fn.jobstart(script, {
+				on_exit = function(_, install_code)
+					if install_code == 0 then
+						Snacks.notify("topiary 安装成功", { title = "Install Topiary" })
+					else
+						Snacks.notify.error(
+							"topiary 安装失败，错误码: " .. install_code,
+							{ title = "Install Topiary" }
+						)
+					end
+				end,
+				on_stderr = function(_, data)
+					if data and data[1] ~= "" then
+						Snacks.notify.error("安装错误: " .. table.concat(data, "\n"), { title = "Install Topiary" })
+					end
+				end,
+			})
+
+			if install_job_id <= 0 then
+				Snacks.notify.error("启动安装进程失败", { title = "Install Topiary" })
+			end
+		end,
+	})
+
+	if job_id <= 0 then
+		Snacks.notify.error("启动获取版本进程失败", { title = "Install Topiary" })
+	end
+end
+
+function M.update_topiary_nushell()
+	local config_dir = vim.fn.expand("~/.config")
+	local target_dir = config_dir .. "/topiary"
+	local repo_url = "https://github.com/blindFS/topiary-nushell.git"
+
+	-- 检查文件夹是否已存在
+	if vim.uv.fs_stat(target_dir) then
+		-- 已存在，执行 git pull 更新（强制覆盖本地修改）
+		vim.system({ "git", "-C", target_dir, "fetch", "origin" }, { text = true }, function(fetch_obj)
+			if fetch_obj.code ~= 0 then
+				vim.notify("Topiary-nushell: git fetch 失败: " .. fetch_obj.stderr, vim.log.levels.ERROR)
+				return
+			end
+
+			-- 强制 reset 到远程最新，丢弃本地所有修改
+			vim.system(
+				{ "git", "-C", target_dir, "reset", "--hard", "origin/main" },
+				{ text = true },
+				function(reset_obj)
+					if reset_obj.code ~= 0 then
+						vim.notify("Topiary-nushell: git reset 失败: " .. reset_obj.stderr, vim.log.levels.ERROR)
+					else
+						vim.notify(
+							"Topiary-nushell 已强制更新到最新版本（本地修改已丢弃）",
+							vim.log.levels.INFO
+						)
+					end
+				end
+			)
+		end)
+	else
+		-- 不存在，先创建 ~/.config（如果不存在），然后 clone
+		vim.fn.mkdir(config_dir, "p") -- "p" 表示递归创建父目录
+		vim.system({ "git", "clone", repo_url, target_dir }, { text = true }, function(clone_obj)
+			if clone_obj.code ~= 0 then
+				vim.notify("Topiary-nushell: clone 失败: " .. clone_obj.stderr, vim.log.levels.ERROR)
+			else
+				vim.notify("Topiary-nushell 已成功克隆到 " .. target_dir, vim.log.levels.INFO)
+			end
+		end)
+	end
+end
+
+vim.api.nvim_create_user_command("UpdateTopiaryNushell", M.update_topiary_nushell, {})
 
 return M

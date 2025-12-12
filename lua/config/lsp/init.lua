@@ -39,35 +39,6 @@ mr.refresh(function()
 		end
 	end
 end)
-local diagnostics = {
-	virtual_text = {
-		spacing = 4,
-		source = "if_many",
-		-- prefix = "●",
-		-- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-		prefix = "icons",
-	},
-	signs = {
-		text = {
-			[vim.diagnostic.severity.ERROR] = Utils.icons.diagnostics.Error,
-			[vim.diagnostic.severity.HINT] = Utils.icons.diagnostics.Hint,
-			[vim.diagnostic.severity.WARN] = Utils.icons.diagnostics.Warn,
-			[vim.diagnostic.severity.INFO] = Utils.icons.diagnostics.Info,
-		},
-	},
-}
-
-diagnostics.virtual_text.prefix = function(diagnostic)
-	local icons = Utils.icons.diagnostics
-	for d, icon in pairs(icons) do
-		if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-			return icon
-		end
-	end
-	return "●"
-end
-
-vim.diagnostic.config(diagnostics)
 vim.keymap.set("n", "<leader>pm", "<cmd>Mason<cr>", { remap = true, desc = "Mason" })
 local lsp_loaded = false
 Utils.create_autocmd_once({ "BufReadPre", "FileType", "BufNewFile" }, {

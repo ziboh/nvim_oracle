@@ -516,7 +516,6 @@ local keys = {
 	{
 		"<leader>e",
 		function()
-			local opts = {}
 			if vim.uv.cwd() == [[C:\Users\ziboh\.config\wezterm]] then
 				opts.watch = false
 			end
