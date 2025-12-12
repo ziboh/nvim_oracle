@@ -197,7 +197,7 @@ M.ScrollBar = {
 		local i = math.floor((curr_line - 1) / lines * #self.sbar) + 1
 		return string.rep(self.sbar[i], 2)
 	end,
-	hl = { fg = palette.yellow, bg = palette.base },
+	hl = { fg = palette.yellow, bg = "none" },
 }
 
 -- Spacing providers

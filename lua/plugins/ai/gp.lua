@@ -9,6 +9,7 @@ end
 
 Utils.create_autocmd_once("BufEnter", {
 	callback = function()
+		vim.g.gp_chat_show_reasoning = false
 		local trans_win
 		local prompt = require("plugins.ai.prompt")
 		local chat_system_prompt_cn = require("gp.defaults").chat_system_prompt
@@ -19,8 +20,6 @@ Utils.create_autocmd_once("BufEnter", {
 			log_file = vim.fs.joinpath(vim.fn.stdpath("data"), "/gp/gp.log"),
 			state_dir = vim.env.GP_DIR == nil and vim.fn.stdpath("data"):gsub("/$", "") .. "/gp/persisted"
 				or vim.env.GP_DIR .. "/persisted",
-
-			chat_show_reasoning = true, -- 设置为 false 以隐藏 reasoning
 			chat_free_cursor = true,
 			openai_api_key = false,
 			providers = {
@@ -596,5 +595,18 @@ Utils.create_autocmd_once("BufEnter", {
 		}
 
 		Utils.setup_keymaps(keys)
+		Snacks.toggle({
+			name = "GP Reasoning",
+			get = function()
+				return vim.g.gp_chat_show_reasoning
+			end,
+			set = function(enabled)
+				if enabled == vim.g.gp_chat_show_reasoning then
+					return
+				else
+					vim.g.gp_chat_show_reasoning = enabled
+				end
+			end,
+		}):map("<leader>ur")
 	end,
 })

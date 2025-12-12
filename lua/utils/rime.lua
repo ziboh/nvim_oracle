@@ -143,4 +143,115 @@ function M.setup(opts)
 	})
 end
 
+--- Use Rclone to sync with remote storage
+---@param src string Local file path
+---@param dst string Remote file path
+---@param callback? fun(success:boolean)
+function M.rclone_sync(src, dst, callback)
+	if vim.fn.executable("rclone") == 0 then
+		Snacks.notify.error("rclone 未安装，请先安装 rclone")
+		if callback then
+			callback(false)
+		end
+	end
+	local rclone_cmd = "rclone sync " .. src .. " " .. dst
+	vim.fn.jobstart(rclone_cmd, {
+		on_exit = function(_, rclone_exit_code)
+			if rclone_exit_code == 0 then
+				if callback then
+					callback(true)
+				end
+			else
+				Snacks.notify.error("rclone 同步失败")
+				if callback then
+					callback(false)
+				end
+			end
+		end,
+	})
+end
+
+function M.rime_on_attach(client, _)
+	local mapped_punc = {
+		[","] = "，",
+		["."] = "。",
+		[":"] = "：",
+		["?"] = "？",
+		["\\"] = "、",
+		[";"] = "；",
+	}
+	local feedkeys = Utils.feedkeys
+
+	local map_set = vim.keymap.set
+	local map_del = vim.keymap.del
+
+	local sync_user_data = function()
+		client:request("workspace/executeCommand", { command = "rime-ls.sync-user-data" }, function(err, result)
+			if result == nil and not err then
+				Snacks.notify("Rime LSP: sync user data success", { title = "Rime LSP" })
+			else
+				Snacks.notify.warn("Rime LSP: sync user data failed", { title = "Rime LSP" })
+			end
+		end)
+	end
+
+	vim.api.nvim_create_user_command("RimeSync", function()
+		if not vim.g.rclone_sync_rime then
+			sync_user_data()
+		else
+			vim.schedule(function()
+				M.rclone_sync(vim.g.rclone_rime_remote_path, vim.g.rclone_rime_local_path, function(success)
+					if success then
+						sync_user_data()
+						vim.schedule(function()
+							M.rclone_sync(vim.g.rclone_rime_local_path, vim.g.rclone_rime_remote_path)
+						end)
+					end
+				end)
+			end)
+		end
+	end, { nargs = 0 })
+
+	vim.api.nvim_create_user_command("RimeToggle", function()
+		client:request("workspace/executeCommand", { command = "rime-ls.toggle-rime" }, function()
+			if vim.g.rime_enabled then
+				for k, _ in pairs(mapped_punc) do
+					map_del({ "i" }, k .. "<space>")
+				end
+			else
+				for k, v in pairs(mapped_punc) do
+					map_set({ "i" }, k .. "<space>", function()
+						if
+							M.rime_ls_disabled({
+								line = vim.api.nvim_get_current_line(),
+								cursor = vim.api.nvim_win_get_cursor(0),
+							})
+						then
+							feedkeys(k .. "<space>", "n")
+						else
+							feedkeys(v, "n")
+						end
+					end)
+				end
+			end
+			vim.g.rime_enabled = not vim.g.rime_enabled
+		end)
+	end, { nargs = 0 })
+
+	Snacks.toggle
+		.new({
+			id = "rime",
+			name = "Rime",
+			get = function()
+				return vim.g.rime_enabled
+			end,
+			set = function(enabled)
+				if enabled ~= vim.g.rime_enabled then
+					vim.cmd("RimeToggle")
+				end
+			end,
+		})
+		:map("<C-M-F12>", { mode = { "n", "i" } })
+end
+
 return M

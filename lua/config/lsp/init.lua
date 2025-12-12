@@ -70,7 +70,7 @@ end
 vim.diagnostic.config(diagnostics)
 vim.keymap.set("n", "<leader>pm", "<cmd>Mason<cr>", { remap = true, desc = "Mason" })
 local lsp_loaded = false
-Utils.create_autocmd_once({ "BufReadPre", "FileType" }, {
+Utils.create_autocmd_once({ "BufReadPre", "FileType", "BufNewFile" }, {
 	callback = function()
 		if Utils.is_memory_less_than() or lsp_loaded then
 			return
