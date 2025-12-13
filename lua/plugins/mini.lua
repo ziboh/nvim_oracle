@@ -26,13 +26,8 @@ Utils.create_autocmd_once({ "BufReadPre", "BufNewFile" }, {
 	end,
 })
 
-local pairs_loaded = false
-Utils.create_autocmd_once({ "InsertEnter", "CmdlineEnter" }, {
+Utils.create_autocmd_once("BufEnter", {
 	callback = function()
-		if pairs_loaded == true then
-			return
-		end
-		pairs_loaded = true
 		local opts = {
 			modes = { insert = true, command = true, terminal = false },
 			-- skip autopair when next character is one of these

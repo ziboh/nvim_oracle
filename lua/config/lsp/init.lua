@@ -212,7 +212,7 @@ Utils.create_autocmd_once({ "BufReadPre", "FileType", "BufNewFile" }, {
 			if file ~= "init.lua" and file:match("%.lua$") then
 				local filename = file:gsub("%.lua$", "")
 				local lsp_opts = require("config.lsp." .. filename)
-				if lsp_opts then
+				if lsp_opts ~= true then
 					opts = vim.tbl_deep_extend("force", opts, lsp_opts)
 				end
 			end
