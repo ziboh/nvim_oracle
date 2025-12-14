@@ -234,7 +234,6 @@ local opts = {
 		},
 		sources = {
 			explorer = {
-				ft = "snacks_explorer_input",
 				win = {
 					input = {
 						keys = {
@@ -252,9 +251,6 @@ local opts = {
 								end
 							end, 100)
 						end,
-						bo = {
-							filetype = "snacks_explorer_list",
-						},
 						keys = {
 							["<leader>"] = "confirm",
 						},
