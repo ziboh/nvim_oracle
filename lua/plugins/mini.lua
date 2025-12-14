@@ -59,6 +59,7 @@ require("mini.icons").setup({
 		age = { glyph = "", hl = "MiniIconsOrange" },
 	},
 	filetype = {
+		["markdown.gh"] = { glyph = "", hl = "MiniIconsYellow" },
 		dotenv = { glyph = "", hl = "MiniIconsYellow" },
 		yaml = { glyph = "", hl = "MiniIconsPurple" },
 		["yaml.chezmoitmpl"] = { glyph = "", hl = "MiniIconsPurple" },
