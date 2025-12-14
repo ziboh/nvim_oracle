@@ -237,6 +237,7 @@ local opts = {
 				win = {
 					input = {
 						keys = {
+							["<CR>"] = { "jump", mode = { "n", "i" } },
 							["<c-l>"] = { "clear_input", mode = { "i" } },
 						},
 					},
