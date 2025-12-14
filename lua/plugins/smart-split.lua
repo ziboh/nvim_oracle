@@ -29,7 +29,7 @@ Utils.create_autocmd_once("BufEnter", {
 			{
 				"<C-l>",
 				function()
-					if vim.bo.filetype == "snacks_explorer_list" then
+					if vim.bo.filetype == "snacks_explorer_list" or vim.bo.filetype == "snacks_explorer_input" then
 						local win_config = vim.api.nvim_win_get_config(0)
 						if win_config.zindex == 33 then -- Snack explorer is on same zindex as main window
 							vim.cmd("wincmd l")

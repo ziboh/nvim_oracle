@@ -52,20 +52,18 @@ M.FileType = {
 			local dir = explore_picker:dir()
 			self.icon, self.icon_hl = Snacks.util.icon(dir, "directory")
 			self.filetype = dir
-		elseif self.filetype:match("(snacks_picker).*") == "snacks_picker" then
-			if self.filetype == "snacks_picker_input" then
-				self.icon = ""
-				self.icon_hl = "MiniIconsCyan"
-				self.filetype = "Input"
-			elseif self.filetype == "snacks_picker_list" then
-				self.icon = ""
-				self.icon_hl = "MiniIconsCyan"
-				self.filetype = "List"
-			elseif self.filetype == "snacks_picker_preview" then
-				self.icon = ""
-				self.icon_hl = "MiniIconsCyan"
-				self.filetype = "Preview"
-			end
+		elseif self.filetype == "snacks_picker_input" or self.filetype == "snacks_explorer_input" then
+			self.icon = ""
+			self.icon_hl = "MiniIconsCyan"
+			self.filetype = "Input"
+		elseif self.filetype == "snacks_picker_list" then
+			self.icon = ""
+			self.icon_hl = "MiniIconsCyan"
+			self.filetype = "List"
+		elseif self.filetype == "snacks_picker_preview" then
+			self.icon = ""
+			self.icon_hl = "MiniIconsCyan"
+			self.filetype = "Preview"
 		elseif self.filetype == "snacks_terminal" then
 			self.icon = ""
 			self.icon_hl = "MiniIconsCyan"

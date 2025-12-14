@@ -234,9 +234,18 @@ local opts = {
 		},
 		sources = {
 			explorer = {
+				ft = "snacks_explorer_input",
 				win = {
+					input = {
+						keys = {
+							["<c-l>"] = { "clear_input", mode = { "i" } },
+						},
+					},
 					list = {
 						on_buf = function(win)
+							vim.defer_fn(function()
+								Utils.change_snacks_picker_to_explorer()
+							end, 100)
 							vim.defer_fn(function()
 								if win:buf_valid() then
 									vim.bo[win.buf].filetype = "snacks_explorer_list"

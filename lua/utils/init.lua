@@ -530,4 +530,28 @@ function M.mason_add_ensure_installed(tools)
 	vim.g.mason_opts = mason_opts
 end
 
+function M.change_snacks_picker_to_explorer()
+	local windows = vim.api.nvim_list_wins()
+	local picker_windows = {}
+
+	-- Find all windows with filetype 'snacks_picker_input'
+	for _, w in ipairs(windows) do
+		local buf = vim.api.nvim_win_get_buf(w)
+		local filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
+		if filetype == "snacks_picker_input" then
+			table.insert(picker_windows, w)
+		end
+	end
+
+	-- If exactly one window has the filetype, change it
+	if #picker_windows == 1 then
+		local buf = vim.api.nvim_win_get_buf(picker_windows[1])
+		vim.api.nvim_set_option_value("filetype", "snacks_explorer_input", { buf = buf })
+	elseif #picker_windows > 1 then
+		Snacks.notify.warn(
+			string.format("Found %d windows with filetype 'snacks_picker_input', not changing", #picker_windows)
+		)
+	end
+end
+
 return M
