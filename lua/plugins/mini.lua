@@ -1,29 +1,6 @@
 vim.pack.add({
-	"https://github.com/nvim-mini/mini.hipatterns",
 	"https://github.com/nvim-mini/mini.icons",
 	"https://github.com/nvim-mini/mini.pairs",
-})
-
-local hipatterns_loaded = false
-Utils.create_autocmd_once({ "BufReadPre", "BufNewFile" }, {
-	callback = function()
-		if hipatterns_loaded then
-			return
-		end
-		hipatterns_loaded = true
-		local hipatterns = require("mini.hipatterns")
-		hipatterns.setup({
-			highlighters = {
-				-- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
-				fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
-				hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
-				todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
-				note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
-				-- highlight hex color strings (`#rrggbb`) using that color
-				hex_color = hipatterns.gen_highlighter.hex_color(),
-			},
-		})
-	end,
 })
 
 Utils.create_autocmd_once("BufEnter", {

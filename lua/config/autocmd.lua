@@ -167,9 +167,9 @@ local function apply_chezmoi_file()
 	local target_path = vim.fs.joinpath(vim.fn.expand("~"), rel_path)
 
 	-- 异步应用
-	vim.system({ "chezmoi", "apply", target_path }, { text = true }, function(result)
+	vim.system({ "chezmoi", "apply", "--force", target_path }, { text = true }, function(result)
 		if result.code == 0 then
-			Snacks.notify("chezmoi apply " .. target_path, { title = "chezmoi" })
+			Snacks.notify("chezmoi apply --force " .. target_path, { title = "chezmoi" })
 		else
 			Snacks.notify.error("chezmoi apply error: " .. target_path, { title = "chezmoi" })
 		end

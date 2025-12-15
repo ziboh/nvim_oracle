@@ -919,6 +919,13 @@ local keys = {
 		desc = "Open a project from zoxide",
 	},
 	{
+		"<leader>sz",
+		function()
+			Snacks.picker.zoxide()
+		end,
+		desc = "Open a project from zoxide",
+	},
+	{
 		"<leader>fu",
 		function()
 			Snacks.picker.undo()
