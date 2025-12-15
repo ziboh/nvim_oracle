@@ -12,6 +12,9 @@ local function term_nav(dir)
 end
 
 local opts = {
+	quickfile = {
+		enabled = true,
+	},
 	notifier = {
 		enabled = true,
 		timeout = 3000,

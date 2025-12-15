@@ -189,3 +189,30 @@ Utils.create_autocmd_once("BufFilePost", {
 		end)
 	end,
 })
+
+-- 存储缓冲区的 buflisted 状态
+local saved_buflisted = {}
+
+-- 格式化前保存 buflisted 状态
+vim.api.nvim_create_autocmd("User", {
+	pattern = "ConformFormatPre",
+	callback = function(args)
+		local bufnr = args.buf
+		saved_buflisted[bufnr] = vim.bo[bufnr].buflisted
+	end,
+})
+
+-- 格式化后恢复 buflisted 状态
+vim.api.nvim_create_autocmd("User", {
+	pattern = "ConformFormatPost",
+	callback = function(args)
+		local bufnr = args.buf
+		-- HACK: 不使用 defer_fn 函数设置不生效
+		vim.defer_fn(function()
+			if saved_buflisted[bufnr] ~= nil then
+				Snacks.util.bo(args.buf, { buflisted = saved_buflisted[bufnr] })
+				saved_buflisted[bufnr] = nil
+			end
+		end, 0)
+	end,
+})

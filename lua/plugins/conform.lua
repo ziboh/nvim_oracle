@@ -1,11 +1,6 @@
-local project_dir = vim.env.PROJECT_DIRS
-if project_dir ~= nil and vim.fn.isdirectory(vim.fs.joinpath(project_dir, "conform.nvim")) == 1 then
-	vim.opt.rtp:append(vim.fs.joinpath(project_dir, "conform.nvim"))
-else
-	vim.pack.add({
-		"https://github.com/stevearc/conform.nvim",
-	})
-end
+vim.pack.add({
+	"https://github.com/stevearc/conform.nvim",
+})
 
 Utils.mason_add_ensure_installed({ "biome", "prettierd" })
 
@@ -39,7 +34,10 @@ Utils.create_autocmd_once("FileType", {
 			},
 			format_on_save = function(bufnr)
 				if vim.g.autoformat or vim.b[bufnr].autoformat then
-					return { timeout_ms = 500, lsp_format = "fallback" }
+					return {
+						timeout_ms = 500,
+						lsp_format = "fallback",
+					}
 				end
 			end,
 		})
@@ -52,6 +50,25 @@ Utils.create_autocmd_once("FileType", {
 
 		if not vim.uv.fs_stat(vim.fn.expand("~/.config") .. "/topiary") then
 			Utils.update_topiary_nushell()
+		end
+
+		-- 保存原始的 lsp_format.format 函数
+		local lsp_format = require("conform.lsp_format")
+		local original_format = lsp_format.format
+
+		-- 包装 LSP 格式化函数
+		---@diagnostic disable-next-line: duplicate-set-field
+		lsp_format.format = function(options, callback)
+			local bufnr = options.bufnr or vim.api.nvim_get_current_buf()
+			local saved_buflisted = vim.bo[bufnr].buflisted
+
+			original_format(options, function(err, did_edit)
+				-- 恢复 buflisted 状态
+				if vim.api.nvim_buf_is_valid(bufnr) then
+					vim.bo[bufnr].buflisted = saved_buflisted
+				end
+				callback(err, did_edit)
+			end)
 		end
 
 		Snacks.toggle({
