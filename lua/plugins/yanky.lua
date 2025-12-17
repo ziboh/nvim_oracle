@@ -24,6 +24,9 @@ Utils.create_autocmd_once("BufEnter", {
 		}
 
 		require("yanky").setup({
+			system_clipboard = {
+				sync_with_ring = false, -- 禁用系统剪贴板同步
+			},
 			ring = {
 				history_length = 100,
 				sync_with_numbered_registers = true,

@@ -54,6 +54,22 @@ Utils.create_autocmd_once("VimEnter", {
 				mode = { "n", "t", "i", "x" },
 			},
 			{
+				"<C-D-F7>",
+				function()
+					require("sidekick.cli").toggle()
+				end,
+				desc = "Sidekick Toggle",
+				mode = { "n", "t", "i", "x" },
+			},
+			{
+				"<C-.>",
+				function()
+					require("sidekick.cli").toggle()
+				end,
+				desc = "Sidekick Toggle",
+				mode = { "n", "t", "i", "x" },
+			},
+			{
 				"<leader>aa",
 				function()
 					require("sidekick.cli").toggle()

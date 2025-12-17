@@ -7,6 +7,8 @@ if not Utils.is_memory_less_than() then
 		{ src = "https://github.com/mason-org/mason.nvim" },
 		{ src = "https://github.com/neovim/nvim-lspconfig" },
 		{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
+		"https://github.com/mrcjkb/rustaceanvim",
+		"https://github.com/saecki/crates.nvim",
 	})
 end
 
@@ -19,6 +21,10 @@ vim.g.mason_opts = {
 		"shfmt",
 	},
 }
+
+if Utils.is_linux() then
+	Utils.mason_add_ensure_installed("bacon")
+end
 
 Utils.create_autocmd_once("User", {
 	pattern = "ConfigLoaded",

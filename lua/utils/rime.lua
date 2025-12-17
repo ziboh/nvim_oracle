@@ -251,7 +251,8 @@ function M.rime_on_attach(client, _)
 				end
 			end,
 		})
-		:map("<C-M-F12>", { mode = { "n", "i" } })
+		:map("<F36>", { mode = { "n", "i" } })
+		:map("<C-D-F12>", { mode = { "n", "i" } })
 end
 
 return M

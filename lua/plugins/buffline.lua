@@ -48,8 +48,8 @@ Utils.create_autocmd_once("UIEnter", {
 			{ "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
 			{ "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
 			{ "]B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
-			{ "<C-A-F10>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
-			{ "<C-A-1>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
+			{ "<F34>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
+			{ "<C-D-F10>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
 			{ "<C-]>", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
 		}
 		Utils.setup_keymaps(keys)

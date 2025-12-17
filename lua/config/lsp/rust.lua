@@ -1,12 +1,7 @@
 local diagnostics = "rust-analyzer" -- rust-analyzer 或 bacon-ls
 if Utils.is_linux() then
 	diagnostics = "bacon-ls"
-	Utils.mason_add_ensure_installed("bacon")
 end
-vim.pack.add({
-	"https://github.com/saecki/crates.nvim",
-	"https://github.com/mrcjkb/rustaceanvim",
-})
 
 local rust_opts = {
 	server = {

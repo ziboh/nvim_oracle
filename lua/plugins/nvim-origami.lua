@@ -17,6 +17,7 @@ Utils.create_autocmd_once("BufEnter", {
 					template = "󰛁  %d lines", -- `%d` is replaced with the number of folded lines
 					hlgroup = "Comment",
 				},
+				disableOnFt = { "snacks_picker_input", "snacks_explorer_input", "snacks_explorer_list", "snacks_input" },
 			},
 		}
 		require("origami").setup(opts)
